@@ -1,11 +1,11 @@
 #coding=utf-8
 from goto import with_goto
-
+import json
 
 f = None
 
 @with_goto
-def getOrderBook(filenames=["./58/data/2021-01-05"]):
+def getData(filenames=["./58/data/2021-01-05"]):
     '''
         return data
     '''
@@ -32,16 +32,44 @@ def getOrderBook(filenames=["./58/data/2021-01-05"]):
             yield line
             goto .begin
             #break
-def testData():
-    fileNames=["./1.txt", "./2.txt"]
-    dat = getOrderBook(fileNames)
+def getOrderBook():
+    fileNames=["data/2021-01-05"]
+    fileNames=["./1.txt"]
+    dat = getData(fileNames)
     line = dat.next()
     while line:
         print("main line:", line)
         line = dat.next()
+        print("line:", type(line), line)
     print("--------------------")
 
+
+gDataPool = getData()
+
+def getOrderBook1():
+    fileNames=["data/2021-01-05"]
+    fileNames = ["./1.txt"]
+ 
+    dat = getData(fileNames)
+    asks = []
+    bids = []
+    curTime = 0
+    if dat :
+        line = dat.next() ##(dat)
+        lineJson = json.loads(line)
+        return lineJson["asks"], lineJson["bids"], lineJson["curTime"]
+    else :
+        print("********************")
+    return asks, bids, curTime
+    
+def test1():
+    getOrderBook1()
+
 def test():
+    asks, bids, curTime = getOrderBook1()
+    print("-----test---asks:",asks, " bids:",bids, " curTime:", curTime)
 
 if __name__ == "__main__":
-    test()
+    i = 0
+    while i < 50:
+        test()
